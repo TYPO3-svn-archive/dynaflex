@@ -38,14 +38,19 @@
 class tx_dynaflex_callhooks	{
 	/* Hooks in class t3lib/class.t3lib_befunc.php */
 	function getFlexFormDS_postProcessDS(&$dataStructArray, $conf, $row, $table, $fieldName)	{
-		$config = $this->loadDynaFlexConfig($table, $row['pid']);
-		$this->callDynaFlex($table, $config['DCA'], $dataStructArray);
+		// debug($row);
+		$config = $this->loadDynaFlexConfig($table, $row['pid'], $row);
+		if ($config !== false)	{
+			$this->callDynaFlex($table, $config['DCA'], $dataStructArray);
+		}
 	}
 
 	/* Hooks in class t3lib/class.t3lib_tceforms.php */
 	function getMainFields_postProcess($table, $row, $pObj)	{
-		$config = $this->loadDynaFlexConfig($table, $row['pid']);
-		$this->callDynaFlex($table, $config['DCA'], NULL, $config['cleanUpField']);
+		$config = $this->loadDynaFlexConfig($table, $row['pid'], $row);
+		if ($config !== false)	{
+			$this->callDynaFlex($table, $config['DCA'], NULL, $config['cleanUpField']);
+		}
 	}
 
 	/* Here comes the routines that are implemented for DynaFlex */
@@ -82,13 +87,13 @@ class tx_dynaflex_callhooks	{
 	 *
 	 * @param	string	$table: The table we are working on
 	 */
-	function loadDynaFlexConfig($table, $pid)	{
+	function loadDynaFlexConfig($table, $pid, &$row)	{
 		$resultDCA = NULL;
 
 		if (!is_array($GLOBALS['T3_VAR']['ext']['dynaflex'][$table]))	{
 			return $resultDCA;
 		}
-
+		
 		$tableRegs = $GLOBALS['T3_VAR']['ext']['dynaflex'][$table];
 		foreach ($tableRegs as $tableRegRef)	{
 			if ($tableRegRef == 'TS')	{
@@ -98,6 +103,15 @@ class tx_dynaflex_callhooks	{
 			} else {
 					// load the DCA from a class and maybe some hooks from within the class
 				$tableRegObj = t3lib_div::getUserObj($tableRegRef);
+				
+					// check if should do anything
+				if (isset($tableRegObj->rowChecks) && is_array($tableRegObj->rowChecks))	{
+					foreach ($tableRegObj->rowChecks as $fieldName => $checkValue)	{
+						if ($row[$fieldName] != $checkValue)	{
+							return false;
+						}
+					}
+				}
 				
 				if (empty($resultDCA))	{
 					$resultDCA = $tableRegObj->DCA;
