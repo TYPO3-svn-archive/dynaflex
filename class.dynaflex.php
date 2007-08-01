@@ -523,9 +523,13 @@ class dynaflex	{
 			case 'pid':
 				$data = $this->cePid;
 				break;
+			case 'cce':
+				$data = $this->ceFields[$condition['cefield']];
+				break;
 			case 'db':
 			default:
 					// fetch the data from database
+				// debug(array($GLOBALS['TYPO3_DB']->SELECTquery($condition['select'], $condition['table'], $where)));
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($condition['select'], $condition['table'], $where);
 				$data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				if ($condition['select'] != '*')	{
@@ -533,12 +537,13 @@ class dynaflex	{
 				}
 				break;
 		}
-
+		
+		
 		if ($condition['isXML']) $data = t3lib_div::xml2array($data);
 		if (isset($condition['path']))	{
 			$data = $this->getDataByPath($data, $condition['path']);
 		}
-
+		
 		$isTrue = false;
 
 			// make the comparison
