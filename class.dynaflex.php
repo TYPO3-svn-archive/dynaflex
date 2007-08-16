@@ -385,12 +385,13 @@ class dynaflex	{
 		}
 		
 		if (!empty($sourceConfig['xml_field']))	{
-			$sourceData = t3lib_div::xml2array($sourceData[$sourceConfig['db_field']]);
+			$sourceData = (is_array($sourceData[$sourceConfig['db_field']])) ? $sourceData[$sourceConfig['db_field']] : t3lib_div::xml2array($sourceData[$sourceConfig['db_field']]);
 			$sourceData = $this->getDataByPath($sourceData['data'], $sourceConfig['path'] .'/' .$sourceConfig['xml_field']);
 			$sourceData = $sourceData['vDEF'];
 		} else {
 			$sourceData = $sourceData[$sourceConfig['db_field']];
 		}
+
 		return $sourceData;
 	}
 
