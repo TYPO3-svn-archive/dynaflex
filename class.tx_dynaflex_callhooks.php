@@ -108,7 +108,7 @@ class tx_dynaflex_callhooks	{
 				if (isset($tableRegObj->rowChecks) && is_array($tableRegObj->rowChecks))	{
 					foreach ($tableRegObj->rowChecks as $fieldName => $checkValue)	{
 						if ($row[$fieldName] != $checkValue)	{
-							return false;
+							continue 2;
 						}
 					}
 				}
