@@ -564,6 +564,9 @@ class dynaflex	{
 			case 'isGreater':
 				$isTrue = (isset($data) && intval($data) > $condition['compareTo']);
 				break;
+			case 'regex':
+				$isTrue = (isset($data) && preg_match($condition['compareTo'], $data));
+				break;
 		}
 
 			// and return the result
