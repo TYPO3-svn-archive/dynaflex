@@ -49,7 +49,8 @@ class tx_dynaflex_callhooks	{
 	function getMainFields_postProcess($table, $row, $pObj)	{
 		$config = $this->loadDynaFlexConfig($table, $row['pid'], $row);
 		if ($config !== false)	{
-			$this->callDynaFlex($table, $config['DCA'], NULL, $config['cleanUpField']);
+			$dataStructArray = null;
+			$this->callDynaFlex($table, $config['DCA'], $dataStructArray, $config['cleanUpField']);
 		}
 	}
 
@@ -63,7 +64,7 @@ class tx_dynaflex_callhooks	{
 	 * @param	array		$dataStructArray: The datastructure we want to change in some cases
 	 * @param	boolean		$doCleanUp: If true the cleanup will be performed at the end of the process
 	 */
-	function callDynaFlex($table, $DCA, $dataStructArray = NULL, $cleanUpField = false)	{
+	function callDynaFlex($table, $DCA, &$dataStructArray = NULL, $cleanUpField = false) {
 		if ($DCA != NULL && t3lib_extMgm::isLoaded('dynaflex'))	{
 			require_once(t3lib_extMgm::extPath('dynaflex') .'class.dynaflex.php');
 			$dynaflex = t3lib_div::makeInstance('dynaflex');
@@ -122,7 +123,7 @@ class tx_dynaflex_callhooks	{
 						$hookObj = t3lib_div::getUserObj($classRef);
 	
 						if (method_exists($hookObj, 'alterDCA_onLoad')) {
-							$hookObj->alterDCA_onLoad(&$resultDCA, $table);
+							$hookObj->alterDCA_onLoad($resultDCA, $table);
 						}
 					}
 				}

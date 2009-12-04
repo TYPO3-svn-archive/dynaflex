@@ -236,7 +236,7 @@ class dynaflex	{
 	 * @param	mixed		$data: The data that should be stored
 	 * @return	void
 	 */
-	function setDataInTCAByPath($path = array(), $data)	{
+	function setDataInTCAByPath($path, $data)	{
 		return $this->setDataByPath($this->orgTCA, $path, $data);
 	}
 
@@ -275,11 +275,11 @@ class dynaflex	{
 		if (!is_array($path)) $path = $this->getPath($path);
 		$dataDest = &$dest;
 
-		if (is_array($path))	{
+		if (is_array($path) && is_array($dataDest))	{
 			foreach ($path as $pathPart)	{
 				$dataDest = &$dataDest[$pathPart];
 			}
-		}    
+		}
 		$dataDest = $data;
 	}
 
