@@ -1003,7 +1003,7 @@ class dynaflex	{
 		global $TYPO3_CONF_VARS;
 
 		if (isset($funcConf['type']) && $funcConf['type'] == 'extraFields')	{
-			$sourceData = split(',', $this->flexData);
+			$sourceData = explode(',', $this->flexData);
 
 				// cycle through the global ext configuration
 			if (!is_array($TYPO3_CONF_VARS['EXTCONF']['dynaflex']['extraFields'][$funcConf['table']])) return;
