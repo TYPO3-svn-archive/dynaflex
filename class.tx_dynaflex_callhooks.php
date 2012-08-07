@@ -32,7 +32,7 @@
  * @subpackage	dynaflex
  *
  * @author		Thomas Hempel <thomas@typo3-unleashed.net>
- * @maintainer	Ingo Schmitt <is@markeing-factory.de>
+ * @maintainer	Ingo Schmitt <is@marketing-factory.de>
  */
 
 class tx_dynaflex_callhooks	{
